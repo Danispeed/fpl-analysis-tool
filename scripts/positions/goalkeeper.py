@@ -1,30 +1,42 @@
-def calculate_rating(player):
-    print(player["web_name"])
+from helper import normalize_stat
+from helper import normalize_stat_inverted
+
+def calculate_rating(player, stats_min_max):
     rating = 0
+    max_rating = 100
 
-    # Clean sheets per 90 minutes (important for goalkeepers)
-    if player["clean_sheets_per_90"] > 0:
-        rating += player["clean_sheets_per_90"] * 20  # Weight clean sheets heavily
+    # normalize positive stats
+    clean_sheets_p90 = normalize_stat(player["clean_sheets_per_90"], stats_min_max["clean_sheets_per_90"]["min"], stats_min_max["clean_sheets_per_90"]["max"])
+    saves_per_90 = normalize_stat(player["saves_per_90"], stats_min_max["saves_per_90"]["min"], stats_min_max["saves_per_90"]["max"])
+    bps = normalize_stat(player["bps"], stats_min_max["bps"]["min"], stats_min_max["bps"]["max"])
+    form = normalize_stat(float(player["form"]), stats_min_max["form"]["min"], stats_min_max["form"]["max"])
 
-    # Saves per 90 minutes (higher saves are good)
-    rating += player["saves_per_90"] * 10  # Give points for each save
+    # normalize negative stats
+    goals_conceded_p90 = normalize_stat_inverted(player["goals_conceded_per_90"], stats_min_max["goals_conceded_per_90"]["min"], stats_min_max["goals_conceded_per_90"]["max"])
+    xGC_p90 = normalize_stat_inverted(float(player["expected_goals_conceded_per_90"]), stats_min_max["expected_goals_conceded_per_90"]["min"], stats_min_max["expected_goals_conceded_per_90"]["max"])
+    yellow_cards = normalize_stat_inverted(player["yellow_cards"], stats_min_max["yellow_cards"]["min"], stats_min_max["yellow_cards"]["max"])
 
-    # Penalize for goals conceded
-    if player["goals_conceded_per_90"] > 1:
-        rating -= player["goals_conceded_per_90"] * 10  # Subtract points for each goal conceded
+    # weights for both positive and negative stats
+    weights = {
+        "clean_sheets_p90": 35,      
+        "saves_per_90": 30,           
+        "bps": 12,
+        "form": 5,     
+        "goals_conceded_p90": 5,      
+        "xGC_p90": 5,                
+        "yellow_cards": 2             
+    }
 
-    # BPS (Bonus Points System)
-    rating += player["bps"] / 10  # Scale the BPS to fit a 10-point range
+    # compute contributions of both negative and positive stats
+    rating += clean_sheets_p90 * weights["clean_sheets_p90"]
+    rating += saves_per_90 * weights["saves_per_90"]
+    rating += bps * weights["bps"]
+    rating += form * weights["form"]
+    rating -= goals_conceded_p90 * weights["goals_conceded_p90"]
+    rating -= xGC_p90 * weights["xGC_p90"]
+    rating -= yellow_cards * weights["yellow_cards"]
 
-    # Form (recent performance)
-    rating += float(player["form"]) * 5  # Scale form to a max of 5 points
-
-    # Expected goals conceded (lower is better)
-    rating -= float(player["expected_goals_conceded_per_90"]) * 5  # Penalize for expected goals conceded
-
-    # Ensure rating is between 0 and 100
-    rating = max(0, min(rating, 100))
-
-    print(rating)
+    # ensure rating is between 0 and 100
+    rating = max(0, min(rating, max_rating))
 
     return rating
