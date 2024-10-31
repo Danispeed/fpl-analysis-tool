@@ -1,3 +1,6 @@
 requests
 pandas
 matplotlib
+Flask
+jsonify
+flask-cors

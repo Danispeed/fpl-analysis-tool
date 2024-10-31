@@ -1,0 +1,57 @@
+.App {
+  text-align: center;
+  padding: 20px;
+}
+
+.table-modifier {
+  display: flex;
+  overflow-x: auto;
+  gap: 20px;
+}
+
+.table {
+  width: 250px;
+  max-height: 600px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  padding: 10px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+
+/* .table-goalkeepers {
+  background-color: #D4EFDF;
+  border: 1px solid #27AE60;
+}
+
+.table-defenders {
+  background-color: #D6EAF8; 
+  border: 1px solid #3498DB;
+}
+
+.table-midfielders {
+  background-color: #FEF5E7;
+  border: 1px solid #F1C40F;
+}
+
+.table-forwards {
+  background-color: #FDEDEC; 
+  border: 1px solid #E74C3C;
+} */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #f5f5f5;
+  position: sticky;
+  top: 0;
+}
