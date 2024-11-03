@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './App.css'; 
+import logo from "./favicon.ico"
+import Sliding_menu from "./sliding_menu";
+import DreamEleven from "./DreamEleven";
 
 function App() {
   // constant for each position
@@ -31,6 +34,14 @@ function App() {
   const sorted_mid = Object.entries(mid).sort(([, ratingA], [, ratingB]) => ratingB - ratingA);
   const sorted_fwd = Object.entries(fwd).sort(([, ratingA], [, ratingB]) => ratingB - ratingA);
 
+  // the top players from each position given
+  // gk = 1, def = 3, mid = 4, fwd = 3
+  const goalkeeper = sorted_gk[0];
+  const defenders = sorted_def.slice(0,3);
+  const midfielders = sorted_mid.slice(0,4);
+  const forwards = sorted_fwd.slice(0,3);
+  const all_players = {goalkeeper: goalkeeper, defenders: defenders, midfielders: midfielders, forwards: forwards}
+  
   // a function for rendering each position's own table
   const render_table = (players, title) => {
     return (
@@ -58,24 +69,34 @@ function App() {
 
   return (
     <div className="App">
-      <header>
-        <h1>FPL Player Scores</h1>
+      {/* top bar */}
+      <header className="top-bar">
+        <img src={logo} alt="Logo" className="logo"/>
+        <h1 className="header">FPL Player Scores</h1>
       </header>
+
+      <Sliding_menu />
+
       {/* rendering each table */}
-      <div className="table-modifier">
-        <div className="table table-goalkeepers">
-          {render_table(sorted_gk, "Goalkeepers")}
-        </div>
-        <div className="table table-defenders">
-          {render_table(sorted_def, "Defenders")}
-        </div>
-        <div className="table table-midfielders">
-          {render_table(sorted_mid, "Midfielders")}
-        </div>
-        <div className="table table-forwards">
-          {render_table(sorted_fwd, "Forwards")}
+      <div className="table-wrapper">
+        <div className="table-container">
+          <div className="table-modifier">
+            <div className="table table-goalkeepers">
+              {render_table(sorted_gk, "Goalkeepers")}
+            </div>
+            <div className="table table-defenders">
+              {render_table(sorted_def, "Defenders")}
+            </div>
+            <div className="table table-midfielders">
+              {render_table(sorted_mid, "Midfielders")}
+            </div>
+            <div className="table table-forwards">
+              {render_table(sorted_fwd, "Forwards")}
+            </div>
+          </div>
         </div>
       </div>
+      <DreamEleven players={all_players}/>
     </div>
   );
 }

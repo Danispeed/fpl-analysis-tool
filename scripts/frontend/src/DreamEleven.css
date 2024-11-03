@@ -1,0 +1,57 @@
+.pitch {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    /* justify-content: center; */
+    background-size: cover;
+    background-image: url("./football_pitch.jpg");
+    /* background-position: center; */
+    padding: 70px;
+    border-radius: 25px;
+    color: white; 
+    /* width: 100%; */
+    margin: 10% auto;
+    max-width: 1000px;
+    box-shadow: 0 8px 16px, rgba(0,0,0,0.3);
+    /* position: relative; */
+}
+
+.pitch h2 {
+    margin-bottom: 50px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.goalkeeper, .defenders, .midfielders, .forwards {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 15px 0;
+}
+
+.goalkeeper span, .defenders span, .midfielders span, .forwards span {
+    padding: 10px 15px;
+    background-color: rgba(0,0,0,0.6);
+    border-radius: 25px; 
+    font-weight: bold;
+    min-width: 80px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+} 
+
+.goalkeeper {
+    margin-top: 20px;
+}
+
+.defenders {
+    justify-content: space-around;
+    margin-top: 30px;
+}
+
+.midfielders {
+    justify-content: space-around;
+    margin-top: 30px;
+}
+
+.forwards {
+    justify-content: space-around;
+    margin-top: 30px;
+}
