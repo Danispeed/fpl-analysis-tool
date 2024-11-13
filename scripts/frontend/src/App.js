@@ -42,27 +42,60 @@ function App() {
   const forwards = sorted_fwd.slice(0,3);
   const all_players = {goalkeeper: goalkeeper, defenders: defenders, midfielders: midfielders, forwards: forwards}
   
+  const disableScrolling = () => {
+    document.body.style.overflow = 'hidden'; 
+  };
+
+  const enableScrolling = () => {
+    document.body.style.overflow = '';
+  };
+
+  document.querySelectorAll('.table').forEach((table) => {
+    table.classList.add('wiggle');
+    setTimeout(() => {
+      table.classList.remove('wiggle');
+      is_wiggling = false;
+    }, 500);
+
+    let is_wiggling = false
+
+    table.addEventListener('scroll', () => {
+      if (table.scrollTop === 0 || table.scrollTop + table.offsetHeight >= table.scrollHeight) {
+        if(!is_wiggling) {
+          is_wiggling = true;
+          table.classList.add('wiggle');
+          setTimeout(() => {
+            table.classList.remove('wiggle');
+            is_wiggling = false;
+          }, 200);
+        }
+      }
+    });
+  });
+
   // a function for rendering each position's own table
   const render_table = (players, title) => {
     return (
-      <div className="table">
+      <div className="table-container fade-in">
         <h2>{title}</h2>
-        <table border="3">
-        <thead>
-            <tr>
-              <th>Player</th>
-              <th>Rating</th>
-            </tr>
-          </thead>
-          <tbody>
-            {players.map(([name, rating], index) => (
-              <tr key={index}>
-                <td>{name}</td>
-                <td>{rating}</td>
+        <div className="table" onMouseEnter={disableScrolling} onMouseLeave={enableScrolling}>
+          <table border="2">
+          <thead>
+              <tr>
+                <th>Player</th>
+                <th>Rating</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {players.map(([name, rating], index) => (
+                <tr key={index}>
+                  <td>{name}</td>
+                  <td>{rating}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     );
   };
@@ -70,33 +103,37 @@ function App() {
   return (
     <div className="App">
       {/* top bar */}
-      <header className="top-bar">
-        <img src={logo} alt="Logo" className="logo"/>
-        <h1 className="header">FPL Player Scores</h1>
-      </header>
+      <div class="bar">
+        <header className="top-bar">
+          <div className="top-bar-content">
+            <img src={logo} alt="Logo" className="logo"/>
+            <h1 className="header">FPL Player Scores</h1>
+          </div>
+        </header>
+        </div>
 
-      <Sliding_menu />
-
-      {/* rendering each table */}
-      <div className="table-wrapper">
-        <div className="table-container">
-          <div className="table-modifier">
-            <div className="table table-goalkeepers">
-              {render_table(sorted_gk, "Goalkeepers")}
-            </div>
-            <div className="table table-defenders">
-              {render_table(sorted_def, "Defenders")}
-            </div>
-            <div className="table table-midfielders">
-              {render_table(sorted_mid, "Midfielders")}
-            </div>
-            <div className="table table-forwards">
-              {render_table(sorted_fwd, "Forwards")}
+        {/* main content */}
+        <main className="main-content">
+          <div className="background-top">
+            <div className="top-section">
+              <div className="sliding-menu-container">
+                <Sliding_menu />
+              </div>
+              <div className="dream-eleven-container">
+                <DreamEleven players={all_players}/>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-      <DreamEleven players={all_players}/>
+          <div className="background-table">
+            {/* rendering each table */}
+            <div className="table-wrapper">
+                {render_table(sorted_gk, "Goalkeepers")}
+                {render_table(sorted_def, "Defenders")}
+                {render_table(sorted_mid, "Midfielders")}
+                {render_table(sorted_fwd, "Forwards")}
+            </div>
+          </div>
+        </main>
     </div>
   );
 }

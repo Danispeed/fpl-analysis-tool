@@ -1,72 +1,252 @@
-.App {
-  text-align: center;
-  padding: 80px;
-}
+@import url("https://fonts.googleapis.com/css2?family=poppins:wght@400;600&display=swap");
 
-.table-wrapper {
-  overflow-x: auto;
-  padding: 20px;
-  width: 90%;
-  box-sizing: border-box;
-  text-align: center;
-}
-
-.table-container {
-  display: inline-block;
-  text-align: center;
-}
-
-.table-modifier {
+.App { /* globally for the entire file */
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(to bottom, #e6e9f0, #eef1f5);
   display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.background-top {
+  background-color: #FFFFFF;
+  width: 100%;
+  position: relative;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.background-table {
+  background-color: #F9F9FB;
+  width: 100%;
+  position: relative;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.main-content {
+  background-color: #FFFFFF;
+  padding-top: 80px;
+  padding-bottom: 80px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.top-section {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
   gap: 20px;
-  white-space: nowrap;
+  justify-content: space-between;
+  margin: 40px auto;
+  padding: 0 20px;
+  max-width: 1200px;
 }
 
-.table {
-  flex: 0 0 250px;
-  max-height: 600px;
-  overflow-y: auto;
-  border: 1px solid #ddd;
+.sliding-menu-container {
+  flex: 0 0 calc(40% - 20px); 
+}
+
+.dream-eleven-container {
+  flex: 0 0 calc(60% - 20px);
+}
+
+@media (max-width: 800px) {
+  .top-section {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .sliding-menu-container, .dream-eleven-container {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+/* Flexbox for the 2x2 grid */
+.table-wrapper {
+  display: flex;
+  flex-wrap: wrap;  /* flex items will wrap onto multiple lines, from top to bottom */
+  justify-content: space-between;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  margin-top: 40px;
+}
+
+/* Table container (box) */
+.table-container {
+  flex: 0 0 calc(50% - 20px); /* calculating half of the row to one table and then some space for the space in between the other table on the same row */
+  box-sizing: border-box;
+  background: linear-gradient(135deg, #ffffff, #f8f9fa);
+  padding: 20px;
   border-radius: 25px;
-  padding: 10px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  max-height: 800px;
+  overflow: hidden;
+  margin-bottom: 40px;
 }
 
+.table-container:hover { /* activates on user hovering over the "table-container" */
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 1s forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Table header */
+.table-container h2 {
+  font-size: 1.5rem;
+  color: #444;
+  margin-bottom: 15px;
+}
+
+/* Make the table scrollable when content exceeds the max height */
+.table {
+  flex-grow: 1; /* allows the table to take up remaining space in the container */
+  overflow-y: hidden; /* enable vertical scrolling */
+  max-height: calc(100% - 60px); 
+}
+
+.table:hover {
+  overflow-y: auto;
+}
+
+
+.table::-webkit-scrollbar { /* showing scrollbar all the time */
+  width: 6px;
+}
+.table::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+/* Table styling */
 table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: collapse; /* removing box like structure around tables */
+  background-color: #ffffff;
+  border-radius: 25px;
+  overflow: hidden; /* removing edge of the table (the rest of what border-collapse doesn't remove) */
+}
+
+.wiggle { /* create wiggle effect when scrolling past end or top of table */
+  animation: wiggle 0.3s ease-in-out;
+}
+
+@keyframes wiggle {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-10px);
+  }
+  50% {
+    transform: translateX(10px);
+  }
+}
+
+h1.header {
+  font-size: 2rem;
+}
+
+.table-container h2 {
+  font-size: 1.5rem;
 }
 
 th, td {
-  padding: 8px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
+  padding: 12px;
+  border-bottom: 1px solid #ddd; /* making the bottom of each row less visible */
 }
 
 th {
-  background-color: #f5f5f5;
-  position: sticky;
-  top: 0;
+  background: linear-gradient(to right, #4A90E2, #357ABD);
+  color: white;
+  text-transform: uppercase;
+  padding: 16px;
 }
 
+tr:nth-child(even) { /* background color every second row */
+  background-color: #f8f9fa;
+}
+
+tr:hover { /* background color for hovering over row in the table */
+  background-color: #eef5ff;
+}
+
+/* Top Bar Styling */
 .top-bar {
-  background-color: #333;
-  padding: 10px 20px;
-  display: flex;
-  align-items: center;
-  height: 60px;
   position: fixed;
   top: 0;
-  left: 0;
-  width: 100vw;
-  z-index: 1000;
+  width: 100%;
+  background-color: #2C3E50;
+  background: linear-gradient(to right, #2C3E50, #4A6A8A);
+  padding: 10px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.top-bar-content {
+  display: flex;
+  align-items: center;
+  max-width: 1200px;
+  width: 100%;
+  padding: 0 20px;
 }
 
 .logo {
-  height: 40px;
+  height: 70px;
+  margin-right: 20px;
+}
+
+.logo:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s;
 }
 
 .header {
-  padding: 10px 20px;
-  color: rgba(255, 255, 255, 0.864);
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+}
+
+.bar {
+  position: fixed;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .logo {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .header {
+    font-size: 1.5rem;
+    margin: 0;
+  }
+
+  .table-container {
+    flex: 0 0 100%;
+    margin-bottom: 20px;
+  }
+
+  .table-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
 }

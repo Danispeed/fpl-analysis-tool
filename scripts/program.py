@@ -56,10 +56,13 @@ for player in players: # loop through all the players and giving each one a rati
         rating = midfielder_rating(player, stats_min_max_mid, team)
     elif position == 4:
         rating = forward_rating(player, stats_min_max_fwd, team)
+
+    chance_of_playing = player.get("chance_of_playing_next_round", None)
+    is_starting = chance_of_playing == 100 # True or False depending on if the player start or not
         
     if rating > 1: 
         name = player["web_name"] 
-        player_ratings[name] = {"rating": int(rating), "position": player["element_type"]}
+        player_ratings[name] = {"rating": int(rating), "position": player["element_type"], "is_starting": is_starting}
 
 # storing player ratings based on positions
 goalkeeper_ratings = {}
@@ -83,25 +86,26 @@ good_forwards = {}
 
 # populate the rating dictionaries
 for player, info in player_ratings.items():
+    # does not include is starting
     position_map[info["position"]][player] = info["rating"]
 
 # print sorted by position and their ratings
-for position_name, ratings in [("goalkeepers", goalkeeper_ratings),
+for position_name, info in [("goalkeepers", goalkeeper_ratings),
                                ("defenders", defender_ratings), 
                                ("midfielders", midfielder_ratings), 
                                ("forwards", forward_ratings)]:
     print(f"\nthe best {position_name}")
     # sort players by rating and print their name and rating
-    for player, rating in sorted(ratings.items(), key=lambda x: x[1], reverse=True): 
-        print(f"{player}: {rating}")
+    for player, data in sorted(info.items(), key=lambda x: x[1], reverse=True): 
+        print(f"{player}: {data}")
         if position_name == "goalkeepers":
-            good_goalkeepers[player] = rating
+            good_goalkeepers[player] = data
         elif position_name == "defenders":
-            good_defenders[player] = rating
+            good_defenders[player] = data
         elif position_name == "midfielders":
-            good_midfielders[player] = rating
+            good_midfielders[player] = data
         elif position_name == "forwards":
-            good_forwards[player] = rating
+            good_forwards[player] = data
     
 # define API endpoints for retrieving specific positions
 

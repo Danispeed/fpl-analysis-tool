@@ -1,13 +1,23 @@
 import React, { useState, useEffect, useRef } from "react";
+import Slider from "react-slick";
 import "./sliding_menu.css";
 
 const slides = [
-    { text: "Welcome to the ... tool! Staytuned for updates of the latest data."},
+    { text: "Welcome to the FPL Player Scores tool! Staytuned for updates of the latest data."},
     { text: "Did you know? The scores of the different positions is not comparable!"},
     { text: "Stay ahead in FPL, get on players performing the best before everyone else in your mini league!"},
 ];
 
 function Sliding_menu() {
+    const settings = {
+        dots: true,
+        infinite: true, 
+        autoplay: true, 
+        autplaySpeed: 8000,
+        pauseOnHover: true,
+        arrows: false,
+    };
+
     const [curr_slide, set_curr_slide] = useState(0);
     const interval_id = useRef(null); // storting the id of interval
 
