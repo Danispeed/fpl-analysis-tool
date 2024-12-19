@@ -30,6 +30,14 @@ python program.py # This starts a Flask server at http://127.0.0.1:5000 serving 
 # In the React project directory:
 npm install
 npm start # This launches the frontend at http://127.0.0.1:3000.
+
+## Additional Dependencies
+
+The frontend uses `react-slick` to implement a carousel/slider component. Before running the frontend, make sure to install:
+
+# In the frontend directory:
+npm install react-slick slick-carousel
+
 ```
 
 # Usage
