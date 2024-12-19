@@ -61,8 +61,7 @@ for player in players: # loop through all the players and giving each one a rati
     is_starting = chance_of_playing == 100 # True or False depending on if the player start or not
         
     if rating > 1: 
-        name = player["web_name"] 
-        player_ratings[name] = {"rating": int(rating), "position": player["element_type"], "is_starting": is_starting}
+        player_ratings[player["id"]] = {"name": player["web_name"] , "rating": int(rating), "position": player["element_type"], "is_starting": is_starting}
 
 # storing player ratings based on positions
 goalkeeper_ratings = {}
@@ -85,27 +84,32 @@ good_midfielders = {}
 good_forwards = {}
 
 # populate the rating dictionaries
-for player, info in player_ratings.items():
-    # does not include is starting
-    position_map[info["position"]][player] = info["rating"]
+for player_id, info in player_ratings.items():
+    position = info["position"]
+    rating = info["rating"]
+    
+    # add player to the appropriate position dictionary using their ID
+    position_map[position][player_id] = {"name": info["name"], "rating": rating}
 
 # print sorted by position and their ratings
-for position_name, info in [("goalkeepers", goalkeeper_ratings),
+for position_name, position_dict in [("goalkeepers", goalkeeper_ratings),
                                ("defenders", defender_ratings), 
                                ("midfielders", midfielder_ratings), 
                                ("forwards", forward_ratings)]:
     print(f"\nthe best {position_name}")
     # sort players by rating and print their name and rating
-    for player, data in sorted(info.items(), key=lambda x: x[1], reverse=True): 
-        print(f"{player}: {data}")
+    for player_id, player_info in sorted(position_dict.items(), key=lambda x: x[1]["rating"], reverse=True):
+        print(f"ID {player_id}: {player_info['name']} - Rating: {player_info['rating']}")
+        
+        # add to the position-specific dictionaries
         if position_name == "goalkeepers":
-            good_goalkeepers[player] = data
+            good_goalkeepers[player_id] = player_info
         elif position_name == "defenders":
-            good_defenders[player] = data
+            good_defenders[player_id] = player_info
         elif position_name == "midfielders":
-            good_midfielders[player] = data
+            good_midfielders[player_id] = player_info
         elif position_name == "forwards":
-            good_forwards[player] = data
+            good_forwards[player_id] = player_info
     
 # define API endpoints for retrieving specific positions
 

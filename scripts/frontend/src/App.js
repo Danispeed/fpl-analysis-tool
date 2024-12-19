@@ -29,10 +29,10 @@ function App() {
   }, []);
 
   // sorting each position for its key value pair
-  const sorted_gk = Object.entries(gk).sort(([, ratingA], [, ratingB]) => ratingB - ratingA);
-  const sorted_def = Object.entries(def).sort(([, ratingA], [, ratingB]) => ratingB - ratingA);
-  const sorted_mid = Object.entries(mid).sort(([, ratingA], [, ratingB]) => ratingB - ratingA);
-  const sorted_fwd = Object.entries(fwd).sort(([, ratingA], [, ratingB]) => ratingB - ratingA);
+  const sorted_gk = Object.entries(gk).sort(([, playerA], [, playerB]) => playerB.rating - playerA.rating);
+  const sorted_def = Object.entries(def).sort(([, playerA], [, playerB]) => playerB.rating - playerA.rating);
+  const sorted_mid = Object.entries(mid).sort(([, playerA], [, playerB]) => playerB.rating - playerA.rating);
+  const sorted_fwd = Object.entries(fwd).sort(([, playerA], [, playerB]) => playerB.rating - playerA.rating);  
 
   // the top players from each position given
   // gk = 1, def = 3, mid = 4, fwd = 3
@@ -80,17 +80,17 @@ function App() {
         <h2>{title}</h2>
         <div className="table" onMouseEnter={disableScrolling} onMouseLeave={enableScrolling}>
           <table border="2">
-          <thead>
+            <thead>
               <tr>
                 <th>Player</th>
                 <th>Rating</th>
               </tr>
             </thead>
             <tbody>
-              {players.map(([name, rating], index) => (
+              {players.map(([id, player], index) => (
                 <tr key={index}>
-                  <td>{name}</td>
-                  <td>{rating}</td>
+                  <td>{player.name}</td>
+                  <td>{player.rating}</td>
                 </tr>
               ))}
             </tbody>
@@ -98,7 +98,7 @@ function App() {
         </div>
       </div>
     );
-  };
+  };  
 
   return (
     <div className="App">

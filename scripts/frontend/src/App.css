@@ -96,15 +96,17 @@
 
 .fade-in {
   opacity: 0;
-  animation: fadeIn 1s forwards;
+  animation: fadeIn 1s ease-in forwards;
 }
 
 @keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
   to {
     opacity: 1;
   }
 }
-
 /* Table header */
 .table-container h2 {
   font-size: 1.5rem;
@@ -182,7 +184,7 @@ tr:nth-child(even) { /* background color every second row */
 }
 
 tr:hover { /* background color for hovering over row in the table */
-  background-color: #eef5ff;
+  background-color: #e0f7fa;
 }
 
 /* Top Bar Styling */
@@ -192,7 +194,7 @@ tr:hover { /* background color for hovering over row in the table */
   width: 100%;
   background-color: #2C3E50;
   background: linear-gradient(to right, #2C3E50, #4A6A8A);
-  padding: 10px 20px;
+  padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -209,8 +211,8 @@ tr:hover { /* background color for hovering over row in the table */
 }
 
 .logo {
-  height: 70px;
-  margin-right: 20px;
+  height: 50px;
+  margin-right: 10px;
 }
 
 .logo:hover {
@@ -243,6 +245,11 @@ tr:hover { /* background color for hovering over row in the table */
   .table-container {
     flex: 0 0 100%;
     margin-bottom: 20px;
+    max-height: 400px;
+  }
+
+  .table {
+    max-height: calc(100% - 60px);
   }
 
   .table-wrapper {
