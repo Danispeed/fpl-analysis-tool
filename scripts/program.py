@@ -44,8 +44,8 @@ stats_min_max_fwd = compute_stats_min_max(forwards, team_data)
 player_ratings = {}
 for player in players: # loop through all the players and giving each one a rating
     position = player["element_type"] 
-    team_code = player["team_code"] 
-    team = team_data[team_code] # fetch precomputed team specific data from the player's team
+    team_id = player["team"] 
+    team = team_data[team_id] # fetch precomputed team specific data from the player's team
     
     # splitting into specific position, for utilizing the appropriate rating calculations
     if position == 1:
@@ -57,7 +57,7 @@ for player in players: # loop through all the players and giving each one a rati
     elif position == 4:
         rating = forward_rating(player, stats_min_max_fwd, team)
 
-    chance_of_playing = player.get("chance_of_playing_next_round", None)
+    chance_of_playing = player.get("chance_of_playing_next_round", 0)
     is_starting = chance_of_playing == 100 # True or False depending on if the player start or not
         
     if rating > 1: 
@@ -87,7 +87,12 @@ good_forwards = {}
 for player_id, info in player_ratings.items():
     position = info["position"]
     rating = info["rating"]
-    
+
+    # skip unknown positions
+    if position not in position_map:
+        print(f"Skipping unknown position {position} for player ID {player_id}") # most likely a manager (assistant manager chip)
+        continue
+
     # add player to the appropriate position dictionary using their ID
     position_map[position][player_id] = {"name": info["name"], "rating": rating}
 

@@ -21,7 +21,7 @@ def normalize_stat_inverted(player_stat, min_stat, max_stat):
 def calculate_team_data(data, fixtures):
     team_data = {}
     for team in data["teams"]:
-        team_code = team["code"] 
+        team_id = team["id"] 
         attack_strength, defense_strenght = team_strength(team)
 
         # gather data on the next 5 upcoming fixtures for a team
@@ -30,15 +30,15 @@ def calculate_team_data(data, fixtures):
         for fixture in fixtures:
             if fixture["finished"] == False:
                 # checking through all premier league fixtures which has not started, starting from the fixture nearest current date
-                if fixture["team_h"] == team_code or fixture["team_a"] == team_code:
+                if fixture["team_h"] == team_id or fixture["team_a"] == team_id:
                     # finding opponents team id, which is the opposite in the same fixture
                     opponent_id = 0
-                    if fixture["team_h"] == team_code:
+                    if fixture["team_h"] == team_id:
                         opponent_id = fixture["team_a"]
-                    if fixture["team_a"] == team_code:
+                    if fixture["team_a"] == team_id:
                         opponent_id = fixture["team_h"]
                     for opponent in data["teams"]:
-                        if opponent["code"] == opponent_id: 
+                        if opponent["id"] == opponent_id: 
                             # comparing the two teams, checking difficulty in 
                             # attack and defense for "team" against "opponent"
                             attack_diff, defense_diff = fixture_comparison(team, opponent)
@@ -51,7 +51,7 @@ def calculate_team_data(data, fixtures):
         # calculate the total fixture difficulty for upcoming 5 matches both in attack and defense
         total_attack_diff = sum(fix["attack_diff"] for fix in upcoming_fixtures[:5])
         total_defense_diff = sum(fix["defense_diff"] for fix in upcoming_fixtures[:5])
-        team_data[team_code] = {"team_attacking_strength": attack_strength, "team_defensive_strength": defense_strenght, "fixture_difficulty_attacker": total_attack_diff, "fixture_difficulty_defender": total_defense_diff}
+        team_data[team_id] = {"team_attacking_strength": attack_strength, "team_defensive_strength": defense_strenght, "fixture_difficulty_attacker": total_attack_diff, "fixture_difficulty_defender": total_defense_diff}
 
     return team_data
 
@@ -83,7 +83,7 @@ def compute_stats_min_max(players, team_data):
 
     # iterate over each player to calculate min and max for each stat
     for player in players:
-        team_code = player["team_code"]
+        team_id = player["team"]
         for stat in stats_min_max.keys():
             try:
                 # calculating goals and assists per 90, from goals, assists, and minutes data
@@ -100,15 +100,15 @@ def compute_stats_min_max(players, team_data):
 
                 # team attack or defense
                 elif stat == "team_attacking_strength":
-                    value = team_data[team_code]["team_attacking_strength"]
+                    value = team_data[team_id]["team_attacking_strength"]
                 elif stat == "team_defensive_strength":
-                    value = team_data[team_code]["team_defensive_strength"]
+                    value = team_data[team_id]["team_defensive_strength"]
 
                 # upcoming 5 fixtures for the players team
                 elif stat == "fixture_difficulty_attacker":
-                    value = team_data[team_code]["fixture_difficulty_attacker"]
+                    value = team_data[team_id]["fixture_difficulty_attacker"]
                 elif stat == "fixture_difficulty_defender":
-                    value = team_data[team_code]["fixture_difficulty_defender"]
+                    value = team_data[team_id]["fixture_difficulty_defender"]
 
                 # default case, get the player stat directly from the API
                 else:
